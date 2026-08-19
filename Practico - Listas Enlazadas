@@ -1,1 +1,161 @@
+#include <iostream>
+using namespace std;
 
+struct nodo{
+    int info;
+    nodo * sig;
+}; typedef Lista
+
+//------------------------------------
+
+void imprimir(nodo * x){
+    while( x != NULL){
+        cout <<"|" << x->info << "|-" ;
+        x = x->sig;
+    }
+
+    cout << "---//" <<endl;
+}
+
+//----------------------------------
+/////////////(MAIN)////////////////
+int main(){
+
+    
+}
+
+//--------------------------------------------------------
+
+//Listas Practico:
+
+//1) Ultimo: dada una lista no vacía, retorna su último elemento.
+
+//Iterativo:
+int Ultimo(Lista L){
+
+    while(L->sig != NULL){
+        L = L->sig;
+    }
+
+    return L->dato;
+}
+
+//Recursivo:
+int Ultimo(Lista L){
+
+   if(L->sig == NULL){
+    return L->dato;
+   }
+
+   return Ultimo(L->sig);
+    
+}
+
+//---------------------------------------------------------------------------
+
+//2)Promedio: dada una lista no vacía, retorna el promedio de sus elementos.
+
+//Iterativo:
+float Promedio(Lista L){
+
+    float total = 0;
+    int cantidad = 0;
+
+    while(L != NULL){
+        total = total + L->dato;
+        cantidad++;
+        L = L->sig;
+    }
+
+    return total/cantidad;
+}
+
+//Recursivo: Dificilismo de hacer almenos que...
+//Cambie la plantilla y la invoque con: "Promedio(L, 0, 0);"
+
+float Promedio(Lista L, float total, int cantidad){
+    
+    if(L == NULL){
+        return total/cantidad;
+    }
+
+    total = total + L->dato;
+    cantidad++;
+    return Promedio(L->sig, total, cantidad);
+}
+
+//---------------------------------------------------------------------------
+
+//3) insOrden: dados un entero x y una lista l ordenada: inserta x en l ordenadamente.
+
+//Iterativo:
+void Insorden(Lista &L, int x){
+
+    if(L == NULL || x < L->dato){
+        Lista nuevo = new nodo;
+        nuevo->dato = x;
+        nuevo->sig = L;
+        L = nuevo;
+        return;
+    }
+   
+    Lista aux = L;
+    while(aux->sig != NULL && aux->sig->dato < x){
+        aux = aux->sig;
+    }
+
+    Lista nuevo = new nodo;
+    nuevo->dato = x;
+    nuevo->sig = aux->sig;
+    aux->sig = nuevo;
+}
+
+//Recursivo:
+
+void Insorden(Lista &L, int x){
+
+    if(L == NULL || x < L->dato){
+        Lista nuevo = new nodo;
+        nuevo->dato = x;
+        nuevo->sig = L;
+        L = nuevo;
+        return;
+    }
+
+    return Insorden(L->sig,x);
+}
+
+//---------------------------------------------------------------------------
+
+//4) insFinal: dados un entero x y una lista L, inserta x al final de L. 
+
+//Iterativo:
+void InsFinal(Lista &L, int x){
+
+    if(L == NULL){
+    Lista nuevo = new nodo;
+    nuevo->dato = x;
+    nuevo->sig = NULL;
+    L = nuevo;
+    }
+
+    Lista aux = L;
+
+    while(aux->sig != NULL){
+        aux = aux->sig;
+    }
+
+    Lista nuevo = new nodo;
+    nuevo->dato = x;
+    nuevo->sig = NULL;
+    aux->sig = nuevo;
+}
+
+    
+
+//Recursivo:
+
+void InsFinal(Lista &L, int x){
+
+    
+}
