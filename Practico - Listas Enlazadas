@@ -219,19 +219,29 @@ void RemoverTodos(Lista &L, int x){
 // pueden ser vacías. 
 
 //Iterativo:
-bool esSubLista(Lista &L, int x){
-    
-
- 
+bool esSublista (Lista L1, Lista L2) {
+    Lista aux1 = L1;
+    Lista aux2 = L2;
+    while (aux1 != NULL && aux2 != NULL) {
+        if (aux1->info == aux2->info) {
+            aux1 = aux1->sig;
+            aux2 = aux2->sig;
+        }
+        else {
+            L2 = L2->sig;
+            aux2 = L2;
+            aux1 = L1;
+        }
+    }
+    return aux1 == NULL;
 }
 
     
 
 //Recursivo:
 
-bool esSubLista(Lista &L, int x){
+bool esSublista (Lista L1, Lista L2){
 
-    
 }
 
 
