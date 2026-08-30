@@ -1,0 +1,249 @@
+#include <iostream>
+using namespace std;
+
+struct nodo_doble{
+    int dato;
+    nodo_doble * sig;
+    nodo_doble * ant;
+};
+typedef nodo_doble * Lista;
+
+/////////(MAIN)////////
+int main () {
+
+
+
+    
+}
+/////////(FIN)////////
+
+//--------------------------------------------------------
+
+//Listas Dobles Practico:
+
+// 1) ListaVacia: retorna una lista vacía
+
+Lista listaVacia() {
+    return NULL;
+}
+
+
+//--------------------------------------------------------
+
+// 2) insPrincipio: dados un entero x y una lista l, retorna el resultado de insertar x al principio de l
+
+
+//iterativo:
+
+Lista InsPrincipio(Lista L, int x) {
+
+    Lista nuevo = new nodo_doble;
+    nuevo->dato = x;
+    nuevo->ant = NULL;
+    nuevo->sig = L;
+
+    if (L != NULL) {
+        L->ant = nuevo;
+    }
+
+    L = nuevo;
+
+    return L;
+}
+
+//---------------------------------------------------------
+
+// 3) esVacia: dada una lista l, verifica si l esta vacía. 
+
+bool EsVacia(Lista L){
+
+    if(L == NULL){
+        return true;
+    }
+    else
+
+    return false;
+}
+
+//---------------------------------------------------------
+
+// 4) esElemento: dados un entero x y una lista L, verifica si x pertenece a L. 
+
+bool EsElemento(Lista L, int x){
+
+    while(L != NULL){
+
+        if(L->dato == x){
+            return true;
+        }
+
+        L = L->sig;
+    }
+
+    return false;
+}
+
+//-----------------------------------------------------------
+
+// 5) RemoverTodos: dados un entero x y una lista L, retorna el resultado de eliminar todas las ocurrencias de x de L. 
+
+void removerTodos (ListaDoble & L, int x) {
+    if (L == NULL)
+        return;
+    ListaDoble der = L, izq = L, borrar;
+    // Borramos todo hacia la izquierda
+    while (izq->ant != NULL) {
+        if (izq->ant->info == x) {
+            borrar = izq->ant;
+            izq->ant = borrar->ant;
+            if (izq->ant != NULL)
+                izq->ant->sig = izq;
+            delete borrar;
+        }
+        else 
+            izq = izq->ant;
+    }
+    // Borramos todo hacia la derecha
+    while (der->sig != NULL) {
+        if (der->sig->info == x) {
+            borrar = der->sig;
+            der->sig = borrar->sig;
+            if (der->sig != NULL)
+                der->sig->ant = der;
+            delete borrar;
+        }
+        else 
+            der = der->sig;
+    }
+    // Si el nodo del comienzo tenía el elemento a borrar también lo borramos
+    if (L->info == x) {
+        if (L->sig == NULL && L->ant == NULL) {
+            delete L;
+            L = NULL;
+            return;
+        }
+        if (L->sig == NULL) {
+            borrar = L;
+            L = L->ant;
+            L->sig = NULL;
+            delete borrar;
+        }
+        else {
+            borrar = L;
+            L->sig->ant = borrar->ant;
+            if (L->ant != NULL)
+                L->ant->sig = L->sig;
+            L = L->sig;
+            delete borrar;
+        }
+    }
+}
+
+//---------------------------------------------------------
+
+// 6) InsOrd: dados un entero x y una lista l ordenada, retorna el resultado de insertar x en l ordenadamente.
+
+void InsOrd(ListaDoble & L, int x) {
+
+    // CASO 1: la lista está vacía
+    if (L == NULL) {
+
+        ListaDoble nuevo = new nodo_doble;
+
+        nuevo->dato = x;
+        nuevo->ant = NULL;
+        nuevo->sig = NULL;
+
+        L = nuevo;          // El nuevo nodo pasa a ser el comienzo
+
+        return;
+    }
+
+    // CASO 2: x debe ir al principio - Como L es el primer nodo, su ant siempre es NULL.
+    if (L->dato > x) {
+
+        ListaDoble nuevo = new nodo_doble;
+
+        nuevo->dato = x;
+        nuevo->sig = L;         // El nuevo apunta al antiguo primero
+        nuevo->ant = NULL;      // Como será el primero, no tiene anterior
+        L->ant = nuevo;         // El antiguo primero apunta hacia atrás al nuevo
+        L = nuevo;              // Actualizamos el comienzo de la lista
+        return;
+    }
+
+
+    // CASO 3: buscar dónde insertar x
+    // aux será el nodo que tenemos delante.
+    // ant será el nodo que tenemos detrás.
+    ListaDoble aux = L;
+    ListaDoble ant = NULL;
+
+    // Avanzamos mientras el dato sea menor que x.
+    while (aux != NULL && aux->dato < x) {
+
+        ant = aux;
+        aux = aux->sig;
+    }
+
+    // Ahora tenemos dos posibilidades:
+    // ant <-> aux
+    // Insertaremos nuevo entre ambos.
+    ListaDoble nuevo = new nodo_doble;
+
+    nuevo->dato = x;
+    nuevo->ant = ant;           // El nuevo apunta hacia atrás a ant
+    nuevo->sig = aux;           // El nuevo apunta hacia adelante a aux
+    ant->sig = nuevo;           // ant apunta hacia adelante al nuevo
+
+
+    // Si aux existe, hacemos que aux apunte
+    // hacia atrás al nuevo.
+    //
+    // Si aux == NULL significa que estamos
+    // insertando al final, por lo que no hay
+    // ningún nodo después que modificar.
+    if (aux != NULL) {
+        aux->ant = nuevo;
+    }
+}
+
+//--------------------------------------------------------------
+// 7) RemoverUltimo: dada una lista L ordenada, retorna el resultado de eliminar el último elemento de L.
+
+ListaDoble RemoverUltimo(ListaDoble & L) {
+
+    // CASO 1: la lista está vacía
+    if (L == NULL) {
+        return NULL;
+    }
+
+
+    // CASO 2: la lista tiene un solo elemento
+    if (L->sig == NULL) {
+
+        delete L;
+        L = NULL;
+
+        return L;
+    }
+
+
+    // CASO 3: la lista tiene varios elementos
+
+    ListaDoble aux = L;                   // aux comienza en el primer nodo
+
+    while (aux->sig != NULL) {          // Avanzamos hasta llegar al último nodo
+        aux = aux->sig;
+    }
+
+    
+    ListaDoble borrar = aux;        // Guardamos el último nodo para poder eliminarlo
+    aux = aux->ant;                // Nos movemos al nodo anterior
+    aux->sig = NULL;              // Ahora aux es el nuevo último nodo por lo tanto su siguiente debe ser NULL.
+    delete borrar;               // Eliminamos el antiguo último nodo
+
+    return L;
+}
+
+
