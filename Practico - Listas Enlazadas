@@ -2,27 +2,19 @@
 using namespace std;
 
 struct nodo{
-    int info;
+    int dato;
     nodo * sig;
-}; typedef Lista
+};
+typedef nodo * Lista;
 
-//------------------------------------
+/////////(MAIN)////////
+int main () {
 
-void imprimir(nodo * x){
-    while( x != NULL){
-        cout <<"|" << x->info << "|-" ;
-        x = x->sig;
-    }
 
-    cout << "---//" <<endl;
-}
-
-//----------------------------------
-/////////////(MAIN)////////////////
-int main(){
 
     
 }
+/////////(FIN)////////
 
 //--------------------------------------------------------
 
@@ -122,7 +114,7 @@ void Insorden(Lista &L, int x){
         return;
     }
 
-    return Insorden(L->sig,x);
+    Insorden(L->sig,x);
 }
 
 //---------------------------------------------------------------------------
@@ -130,25 +122,26 @@ void Insorden(Lista &L, int x){
 //4) insFinal: dados un entero x y una lista L, inserta x al final de L. 
 
 //Iterativo:
-void InsFinal(Lista &L, int x){
-
-    if(L == NULL){
-    Lista nuevo = new nodo;
-    nuevo->dato = x;
-    nuevo->sig = NULL;
-    L = nuevo;
-    }
-
-    Lista aux = L;
-
-    while(aux->sig != NULL){
-        aux = aux->sig;
-    }
-
-    Lista nuevo = new nodo;
-    nuevo->dato = x;
-    nuevo->sig = NULL;
-    aux->sig = nuevo;
+void InsFinal(Lista &L, int x){ 
+ 
+    if(L == NULL){ 
+        Lista nuevo = new nodo; 
+        nuevo->dato = x; 
+        nuevo->sig = NULL; 
+        L = nuevo;
+        return;
+    } 
+ 
+    Lista aux = L; 
+ 
+    while(aux->sig != NULL){ 
+        aux = aux->sig; 
+    } 
+ 
+    Lista nuevo = new nodo; 
+    nuevo->dato = x; 
+    nuevo->sig = NULL; 
+    aux->sig = nuevo; 
 }
 
     
@@ -157,5 +150,181 @@ void InsFinal(Lista &L, int x){
 
 void InsFinal(Lista &L, int x){
 
+    if(L == NULL){
+        Lista nuevo= new nodo;
+        nuevo->dato = x;
+        nuevo->sig = NULL;
+        L = nuevo;
+        return;
+    }
+
+    InsFinal(L->sig, x);
     
 }
+   
+
+//---------------------------------------------------------------------------
+
+//5)RemoverTodos: dados un entero x y una lista l, remueve a x de l. 
+
+//Iterativo:
+void RemoverTodos(Lista &L, int x){
+    
+    while(L!= NULL && L->dato == x){ // Chequeo si el primer elemento es "X"
+        Lista borrar = L;
+        L = L->sig;
+        delete borrar;
+    }
+
+    Lista aux = L;
+
+    While(aux != NULL && aux->sig != NULL){
+
+        if(aux->sig->dato == x){
+            Lista borrar = aux->sig;
+            aux->sig = borrar->sig;
+            delete borrar;
+        }
+
+        aux = aux->sig;
+    }
+ 
+}
+
+    
+
+//Recursivo:
+
+void RemoverTodos(Lista &L, int x){
+
+    if(L == NULL){
+        return;
+    }
+
+   if(L->dato == x){
+    Lista borrar = L;
+    L = L->sig;
+    delete borrar;
+
+    RemoverTodos(L, x);
+   }
+    
+   RemoverTodos(L->sig, x);
+}
+   
+//---------------------------------------------------------------------------
+
+//6) esSubLista: dadas dos listas l y p, verifica si l esta incluida en p. Una lista l1 si 
+// y sólo sí existen dos listas, l3 y l4, tal que cumplen que l2 = l3 l1 l4. Tenga en cuenta que las listas 
+// pueden ser vacías. 
+
+//Iterativo:
+bool esSubLista(Lista &L, int x){
+    
+
+ 
+}
+
+    
+
+//Recursivo:
+
+bool esSubLista(Lista &L, int x){
+
+    
+}
+
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+// 1) primeros: dado un natural i y una lista l, retorna la lista resultado de tomar los primeros i elementos de 
+ 
+
+//Iterativo:
+Lista primeros (Lista L, int x) {
+    
+    Lista res = NULL;
+    Lista aux = NULL;
+
+    while (L != NULL && x > 0) {
+        if (res == NULL) {
+            res = new nodo;
+            aux = res;
+        }
+        else {
+            aux->sig = new nodo;
+            aux = aux->sig;
+        }
+
+        aux->info = L->info;
+        aux->sig = NULL;
+        L = L->sig;
+        x--;
+    }
+    return res;
+}
+
+    
+//Recursivo:
+
+Lista Primeros(Lista L, int x){
+
+    if(L == NULL || x == 0){
+        return NULL;
+    }
+
+    Lista nuevo = new nodo;
+    nuevo->dato = L->dato;
+    nuevo->sig = Primeros(L->sig, x - 1);
+
+    return nuevo;
+}
+
+//----------------------------------------------------------------------------
+// 2) SinPrimeros: dado un natural i y una lista l, retorna la lista resultado de eliminar los primeros i elementos de l. 
+
+//Iterativo:
+
+Lista SinPrimeros(Lista L, int x){
+    
+    while(L != NULL && x > 0){
+        Lista borrar = L;
+        L = L->sig;
+        delete borrar;
+        x--;
+    }
+
+    return L;
+}
+
+//Recursivo:
+
+Lista SinPrimeros(Lista L, int x){
+
+    if(L == NULL || x == 0){
+        return L;
+    }
+
+    Lista borrar = L;
+    L = L->sig;
+    delete borrar;
+
+    return SinPrimeros(L, x - 1);
+}
+
+//----------------------------------------------------------------------------------
+// 3) intercalado: dadas dos listas ordenadas l y p, genera una lista intercalando ordenadamente ambas listas. 
+
+// 4) concatenacion: dadas dos listas l y p, retorna una lista que contiene a los elementos de l y luego a 
+//los elementos de p, en el mismo orden. Comparar con la solución recursiva.
