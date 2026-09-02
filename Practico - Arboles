@@ -1,12 +1,22 @@
 #include <iostream>
 using namespace std;
 
+//Arbol Struct:
 struct nodoAB { 
-int dato; 
-nodoAB * izq;
-nodoAB * der; 
+    int dato; 
+    nodoAB * izq;
+    nodoAB * der; 
 };
 typedef nodoAB * AB
+
+//===================
+
+//Lista Struct:
+struct nodo Lista { 
+    int dato; 
+    nodo Lista * sig; 
+};
+typedef nodo Lista * Lista
 
 /////////(MAIN)////////
 int main () {
@@ -99,4 +109,110 @@ void LiberarArbol(AB A){
     LiberarArbol(A->der);
 
     delete A;  //Elimino el nodo despues pk sino nopuedo ir al nodo izquierdo y derecho
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+// 1) enOrden: que recibe un árbol b y retorna una lista con los elementos de b ordenados según la recorrida en orden de b. 
+
+
+void enOrden(AB A, Lista &L) {
+    if (A == NULL)
+        return;
+
+    enOrden(A->izq, L);
+
+    insFinal(L, A->dato);
+
+    enOrden(A->der, L);
+}
+
+Lista enOrden(AB A) {
+    Lista L = NULL;
+
+    enOrden(A, L);
+
+    return L;
+}
+
+//-------------------------------------------------
+// 2) preOrden: que recibe un árbol b y retorna una lista con los elementos de b ordenados según la recorrida en pre orden de b.
+
+void preOrden(AB A, Lista &L) {
+    if (A == NULL)
+        return;
+
+    insFinal(L, A->dato);
+
+    preOrden(A->izq, L);
+
+    preOrden(A->der, L);
+}
+
+Lista preOrden(AB A) {
+    Lista L = NULL;
+
+    preOrden(A, L);
+
+    return L;
+}
+//-------------------------------------------------
+// 3) postOrden: que recibe un árbol b y retorna una lista con los elementos de b ordenados según la recorrida en post orden de b. 
+
+void postOrden(AB A, Lista &L) {
+    if (A == NULL)
+        return;
+
+    postOrden(A->izq, L);
+
+    postOrden(A->der, L);
+
+    insFinal(L, A->dato);
+}
+
+Lista postOrden(AB A) {
+    Lista L = NULL;
+
+    postOrden(A, L);
+
+    return L;
+}
+
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+//-------------------------------------------------
+
+
+// 4) EsCamino: que recibe un árbol b y una lista l, y retorna TRUE si y solo si l es igual a un camino desde la raíz a un hoja de b.
+
+bool EsCamino(AB A, Lista L){
+
+if (A == NULL || L == NULL)                                                      // ¿Existe árbol y lista?
+    return false;
+
+if (A->dato != L->dato)                                                      // ¿Coinciden los valores?
+    return false;
+
+if (L->sig == NULL){                                                       // ¿Se terminó la lista?
+    
+    if (A->izq == NULL && A->der == NULL)
+        return true;
+    else
+        return false;
+    }                                                  
+    
+return EsCamino(A->izq, L->sig) || EsCamino(A->der, L->sig);        // Si no terminó, ¿puedo continuar por izquierda o derecha?
+
 }
