@@ -44,6 +44,7 @@ AB ContarElementos(AB A){
 
 //--------------------------------------------------------
 // 3) función contarHojas: que recibe un árbol y retorna la cantidad de hojas (nodos cuyos ambos subárboles son vacíos del mismo. 
+
 AB ContarHojas(AB A){
 
     if(A == NULL){
