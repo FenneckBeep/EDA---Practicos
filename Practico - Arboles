@@ -1,1 +1,101 @@
+#include <iostream>
+using namespace std;
 
+struct nodoAB { 
+int dato; 
+nodoAB * izq;
+nodoAB * der; 
+};
+typedef nodoAB * AB
+
+/////////(MAIN)////////
+int main () {
+
+
+
+    
+}
+/////////(FIN)////////
+
+//--------------------------------------------------------
+// 1) Función consArbol: que retorna un árbol no vacío a partir de un natural y otros dos árboles. 
+
+AB consArbol(int x, AB izq, AB der) {
+    AB nuevo = new nodoAB;
+
+    nuevo->dato = x;
+    nuevo->izq = izq;
+    nuevo->der = der;
+
+    return nuevo;
+}
+
+//--------------------------------------------------------
+// 2) función contarElems: que recibe un árbol y retorna la cantidad de elementos del mismo. 
+
+AB ContarElementos(AB A){
+
+    if(L == NULL){
+        return 0; 
+    }
+
+    return 1 + ContarElementos(AB A->der) + ContarElementos(AB A->izq);
+}
+
+//--------------------------------------------------------
+// 3) función contarHojas: que recibe un árbol y retorna la cantidad de hojas (nodos cuyos ambos subárboles son vacíos del mismo. 
+AB ContarHojas(AB A){
+
+    if(A == NULL){
+        return 0;
+    }
+
+    if(L->izq == NULL && L->der == NULL){
+        return 1;
+    }
+
+    return ContarElementos(AB A->izq) + ContarElementos(AB A->der);
+}
+
+//--------------------------------------------------------
+// 4) función altura: que recibe un árbol y retorna la altura del mismo. Si el árbol es vacío su altura es 0.
+
+int altura(AB A) {
+    if (A == NULL)
+        return 0;
+
+    return 1 + max(altura(A->izq), altura(A->der));
+}
+
+//----------------------------------------------------------
+// 5) Función copiar: que recibe un árbol y retorna una copia limpia que no comparte registros de memoria del mismo.
+
+AB Copiar(AB A) {
+    if (A == NULL){
+        return NULL;
+    }
+    else {
+
+    AB nuevo = new nodoAB;
+    nuevo->dato = A->dato;
+
+    nuevo->izq = Copiar(A->izq);
+    nuevo->der = Copiar(A->der);
+
+    return nuevo;
+    }
+}
+//-----------------------------------------------------------
+// 6) Procedimiento liberarArbol: que recibe un árbol y elimina del mismo todos los nodos, liberando la memoria asociada a cada uno de ellos.
+
+void LiberarArbol(AB A){
+    if(A == NULL){
+        return NULL;
+    }
+    else
+    
+    LiberarArbol(A->izq);
+    LiberarArbol(A->der);
+
+    delete A;  //Elimino el nodo despues pk sino nopuedo ir al nodo izquierdo y derecho
+}
