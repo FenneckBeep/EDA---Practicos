@@ -21,9 +21,7 @@ typedef nodo Lista * Lista
 /////////(MAIN)////////
 int main () {
 
-
-
-    
+   
 }
 /////////(FIN)////////
 
