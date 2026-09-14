@@ -336,5 +336,114 @@ Lista SinPrimeros(Lista L, int x){
 //----------------------------------------------------------------------------------
 // 3) intercalado: dadas dos listas ordenadas l y p, genera una lista intercalando ordenadamente ambas listas. 
 
+// Pre-condición: las listas no tienen elementos en común y están ordenada crecientemente
+Lista intercalado (Lista L1, Lista L2) {
+    Lista res = NULL, aux; 
+    while (L1 != NULL || L2 != NULL){
+        // hay que crear nodo
+        if (res == NULL) {
+            // estoy entrando por primera vez
+            res = new nodo;
+            aux = res;
+        }
+        else {
+            aux->sig = new nodo;
+            aux = aux->sig;
+        }
+        if ((L1 == NULL) || (L2 != NULL && L2->info < L1->info)) {
+            aux->info = L2->info;
+            L2 = L2->sig;
+        }
+        else {
+            aux->info = L1->info;
+            L1 = L1->sig;
+        }
+    }
+    if (res != NULL)
+        aux->sig = NULL;
+    return res;
+}
+
+
+
+// Pre-condición: las listas no tienen elementos en común.
+Lista intercalado (Lista L1, Lista L2) {
+    // Creo un nodo ficticio para evitar tener muchos casos. A lo último lo elimino.
+    Lista res = new nodo;
+    Lista aux = res;
+    while (L1 != NULL || L2 != NULL) {
+        aux->sig = new nodo;
+        aux = aux->sig;
+        if ((L1 == NULL) || (L2 != NULL && L1->info > L2->info)){
+            aux->info = L2->info;
+            L2 = L2->sig;
+        }
+        else {
+            aux->info = L1->info;
+            L1 = L1->sig;
+        }
+    }
+    aux->sig = NULL;
+    Lista borrar = res;
+    res = res->sig;
+    delete borrar;
+    return res;
+}
+
+Lista intercalado_rec (Lista L1, Lista L2) {
+    if (L1 == NULL && L2 == NULL)
+        return NULL;
+    Lista res = new nodo;
+    if (L1 == NULL || (L2 != NULL && L2->info < L1->info)) {
+        res->info = L2->info;
+        res->sig = intercalado_rec(L1, L2->sig);
+    }
+    else {
+        res->info = L1->info;
+        res->sig = intercalado_rec(L1->sig, L2);
+    }
+    return res;
+}
+
+//-------------------------------------------------------------------
+
 // 4) concatenacion: dadas dos listas l y p, retorna una lista que contiene a los elementos de l y luego a 
 //los elementos de p, en el mismo orden. Comparar con la solución recursiva.
+
+Lista concatenacion (Lista L1, Lista L2) {
+    // Creo un nodo ficticio para evitar tener muchos casos. A lo último lo elimino.
+    Lista res = new nodo;
+    Lista aux = res;
+    while (L1 != NULL) {
+        aux->sig = new nodo;
+        aux = aux->sig;
+        aux->info = L1->info;
+        L1 = L1->sig;
+    }
+    while (L2 != NULL) {
+        aux->sig = new nodo;
+        aux = aux->sig;
+        aux->info = L2->info;
+        L2 = L2->sig;
+    }
+    aux->sig = NULL;
+    Lista borrar = res;
+    res = res->sig;
+    delete borrar;
+    return res;
+}
+
+Lista concatenacion_recursivo (Lista L1, Lista L2) {
+    if (L1 == NULL && L2 == NULL)
+        return NULL;
+    Lista res = new nodo;
+    if (L1 != NULL) {
+        res->info = L1->info;
+        res->sig = concatenacion_recursivo (L1->sig, L2);
+    }
+    else {
+        res->info = L2->info;
+        res->sig = concatenacion_recursivo (L1, L2->sig);
+    }
+    return res;
+}
