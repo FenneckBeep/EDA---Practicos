@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+//Arbol Struct:
+struct nodoABB { 
+    int dato; 
+    nodoAB * izq;
+    nodoAB * der; 
+};
+typedef nodoABB * ABB
+
+//===================
+
+/////////(MAIN)////////
+int main () {
+
+   
+}
+/////////(FIN)////////
+
+void insertarABB(ABB &A, int x){
+
+    if(A == NULL){
+        ABB nuevo = new nodoABB;
+        nuevo->dato = x;
+        nuevo->izq = NULL;
+        nuevo->der = NULL;
+        A = nuevo;
+        return;
+    }
+
+    if(x < A->dato){
+        return insertarABB(A->izq, x);
+    }
+    else
+        return insertarABB(A->der, x);
+}
