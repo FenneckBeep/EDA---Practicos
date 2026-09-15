@@ -184,9 +184,9 @@ void RemoverTodos(Lista &L, int x){
             Lista borrar = aux->sig;
             aux->sig = borrar->sig;
             delete borrar;
-        }
+        }else{
 
-        aux = aux->sig;
+            aux = aux->sig;
     }
  
 }
