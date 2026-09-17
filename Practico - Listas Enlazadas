@@ -187,8 +187,10 @@ void RemoverTodos(Lista &L, int x){
         }else{
 
             aux = aux->sig;
-    }
+        }
  
+    }
+
 }
 
     
@@ -223,7 +225,7 @@ bool esSubLista_iterativo (Lista L1, Lista L2) {
     Lista aux1 = L1;
     Lista aux2 = L2;
     while (L2 != NULL && L1 != NULL) {
-        if (L1->info == L2->info) {
+        if (L1->dato == L2->dato) {
             L1 = L1->sig;
             L2 = L2->sig;
         }
@@ -245,7 +247,7 @@ bool esSubLista (Lista L1, Lista L2) {
         return true;
     if (L1 == NULL)
         return false;
-    if (L1->info != L2->info)
+    if (L1->dato != L2->dato)
         return esSubLista(L1->sig, L2);
     else 
         return esSubLista(L1->sig, L2->sig) || esSubLista(L1->sig, L2);
@@ -284,7 +286,7 @@ Lista primeros (Lista L, int x) {
             aux = aux->sig;
         }
 
-        aux->info = L->info;
+        aux->dato = L->dato;
         aux->sig = NULL;
         L = L->sig;
         x--;
@@ -344,6 +346,9 @@ Lista SinPrimeros(Lista L, int x){
 // 3) intercalado: dadas dos listas ordenadas l y p, genera una lista intercalando ordenadamente ambas listas. 
 
 // Pre-condición: las listas no tienen elementos en común y están ordenada crecientemente
+
+//Iterativo:
+
 Lista intercalado (Lista L1, Lista L2) {
     Lista res = NULL, aux; 
     while (L1 != NULL || L2 != NULL){
@@ -357,12 +362,12 @@ Lista intercalado (Lista L1, Lista L2) {
             aux->sig = new nodo;
             aux = aux->sig;
         }
-        if ((L1 == NULL) || (L2 != NULL && L2->info < L1->info)) {
-            aux->info = L2->info;
+        if ((L1 == NULL) || (L2 != NULL && L2->dato < L1->dato)) {
+            aux->dato = L2->dato;
             L2 = L2->sig;
         }
         else {
-            aux->info = L1->info;
+            aux->dato = L1->dato;
             L1 = L1->sig;
         }
     }
@@ -382,11 +387,11 @@ Lista intercalado (Lista L1, Lista L2) {
         aux->sig = new nodo;
         aux = aux->sig;
         if ((L1 == NULL) || (L2 != NULL && L1->info > L2->info)){
-            aux->info = L2->info;
+            aux->dato = L2->dato;
             L2 = L2->sig;
         }
         else {
-            aux->info = L1->info;
+            aux-dato = L1->dato;
             L1 = L1->sig;
         }
     }
@@ -397,16 +402,17 @@ Lista intercalado (Lista L1, Lista L2) {
     return res;
 }
 
+//Recursivo:
 Lista intercalado_rec (Lista L1, Lista L2) {
     if (L1 == NULL && L2 == NULL)
         return NULL;
     Lista res = new nodo;
-    if (L1 == NULL || (L2 != NULL && L2->info < L1->info)) {
-        res->info = L2->info;
+    if (L1 == NULL || (L2 != NULL && L2->dato < L1->dato)) {
+        res->dato = L2->dato;
         res->sig = intercalado_rec(L1, L2->sig);
     }
     else {
-        res->info = L1->info;
+        res->dato = L1->dato;
         res->sig = intercalado_rec(L1->sig, L2);
     }
     return res;
@@ -417,6 +423,7 @@ Lista intercalado_rec (Lista L1, Lista L2) {
 // 4) concatenacion: dadas dos listas l y p, retorna una lista que contiene a los elementos de l y luego a 
 //los elementos de p, en el mismo orden. Comparar con la solución recursiva.
 
+//Iterativo:
 Lista concatenacion (Lista L1, Lista L2) {
     // Creo un nodo ficticio para evitar tener muchos casos. A lo último lo elimino.
     Lista res = new nodo;
@@ -424,13 +431,13 @@ Lista concatenacion (Lista L1, Lista L2) {
     while (L1 != NULL) {
         aux->sig = new nodo;
         aux = aux->sig;
-        aux->info = L1->info;
+        aux->dato = L1->dato;
         L1 = L1->sig;
     }
     while (L2 != NULL) {
         aux->sig = new nodo;
         aux = aux->sig;
-        aux->info = L2->info;
+        aux->dato = L2->dato;
         L2 = L2->sig;
     }
     aux->sig = NULL;
@@ -440,16 +447,17 @@ Lista concatenacion (Lista L1, Lista L2) {
     return res;
 }
 
+//Recursivo:
 Lista concatenacion_recursivo (Lista L1, Lista L2) {
     if (L1 == NULL && L2 == NULL)
         return NULL;
     Lista res = new nodo;
     if (L1 != NULL) {
-        res->info = L1->info;
+        res->dato = L1->dato;
         res->sig = concatenacion_recursivo (L1->sig, L2);
     }
     else {
-        res->info = L2->info;
+        res->dato = L2->dato;
         res->sig = concatenacion_recursivo (L1, L2->sig);
     }
     return res;
