@@ -1,1 +1,114 @@
+#include <iostream>
+using namespace std;
 
+struct nodo{
+    int dato;
+    nodo * sig;
+};
+typedef nodo * Lista;
+
+/////////(MAIN)////////
+int main () {
+
+
+
+    
+}
+/////////(FIN)////////
+
+//--------------------------------------------------------
+
+//Listas Circulares Practico:
+//1) Crea una Lista vacia:
+
+Lista listaVacia(){
+    return NULL;
+}
+
+//--------------------------------------------------------
+
+// 2) esVacia: dada una lista l, verifica si l esta vacía.
+
+bool esVacia(Lista L){
+    return L == NULL;
+}
+
+//--------------------------------------------------------
+
+// 3) Dada una lista l no vacía, retorna la lista sin su primer elemento.
+
+Lista resto(Lista L){
+
+    Lista aux = L;
+
+    while(aux->sig != L){
+        aux = aux->sig;
+    }
+
+    Lista primero = L;
+    L = L->sig;
+
+    aux->sig = L;
+
+    delete primero;
+
+    return L;
+}
+
+//-----------------------------------------------
+
+// 4) dado una lista no vacia retorna su ultimo elemento
+
+int ultimo(Lista L){
+
+    Lista aux = L;
+
+    while(aux->sig != L){
+        aux = aux->sig;
+    }
+
+    return aux->dato;
+}
+
+//--------------------------------------------------
+
+// 5) inserta en orden en una lista circular:
+
+Lista insOrden(Lista L, int x){
+
+    Lista nuevo = new nodo;
+    nuevo->dato = x;
+
+    // Lista vacía
+    if(L == NULL){
+        nuevo->sig = nuevo;
+        return nuevo;
+    }
+
+    // Insertar antes del primero
+    if(x < L->dato){
+
+        Lista aux = L;
+
+        while(aux->sig != L){
+            aux = aux->sig;
+        }
+
+        nuevo->sig = L;
+        aux->sig = nuevo;
+
+        return nuevo;
+    }
+
+    // Buscar dónde insertar
+    Lista aux = L;
+
+    while(aux->sig != L && aux->sig->dato < x){
+        aux = aux->sig;
+    }
+
+    nuevo->sig = aux->sig;
+    aux->sig = nuevo;
+
+    return L;
+}
