@@ -1,1 +1,89 @@
+#include <iostream>
+using namespace std;
 
+struct nodo {
+    int dato;
+    nodo *sig;
+};
+
+struct cabezal {
+    nodo *primero;
+    nodo *actual;
+};
+
+typedef cabezal *lista;
+
+/////////(MAIN)////////
+int main () {
+
+
+
+    
+}
+/////////(FIN)////////
+
+//--------------------------------------------------------
+
+//Listas Indizadas Practico:
+
+//1) Lista vacia:
+
+Lista listaVacia(){
+
+    Lista l = new cabezal;
+
+    L->primero = NULL;
+    L->actual = NULL;
+
+    return L;
+}
+
+//------------------------------------------------------
+
+//2) Dada una lista no vacía, coloca la posición actual al inicio.
+
+void inicio(lista L){
+    L->actual = L->primero;
+}
+
+//-----------------------------------------------------
+
+//3) Mueve actual al siguiente nodo. Si actual está en el final, vuelve al primero.
+
+void siguiente(lista l){
+
+    if(l->actual->sig == NULL)
+        l->actual = l->primero;
+    else
+        l->actual = l->actual->sig;
+}
+
+//-----------------------------------------------------
+
+//4) Inserta x después de actual. El nodo recién insertado pasa a ser actual.
+
+void insertar(lista L, int x){
+
+    nodo *nuevo = new nodo;
+    nuevo->dato = x;
+
+    if(L->primero == NULL){
+        nuevo->sig = NULL;
+        L->primero = nuevo;
+        L->actual = nuevo;
+        return;
+    }
+
+    nuevo->sig = L->actual->sig;
+    L->actual->sig = nuevo;
+
+    L->actual = nuevo;
+}
+
+//------------------------------------------------
+
+//5) Retorna el elemento de la posición actual.
+
+int elemento(lista L){
+    return L->actual->dato;
+}
