@@ -99,7 +99,7 @@ AB Copiar(AB A) {
 
 void LiberarArbol(AB A){
     if(A == NULL){
-        return NULL;
+        return;
     }
     else
     
