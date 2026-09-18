@@ -2,14 +2,13 @@
 using namespace std;
 
 //Arbol Struct:
-struct nodoABB { 
+struct nodoAB { 
     int dato; 
     nodoAB * izq;
     nodoAB * der; 
 };
-typedef nodoABB * ABB
+typedef nodoAB * ABB
 
-//===================
 
 /////////(MAIN)////////
 int main () {
@@ -18,9 +17,14 @@ int main () {
 }
 /////////(FIN)////////
 
-void insertarABB(ABB &A, int x){
+//--------------------------------------------------------
+// A) Procedimiento insertarABB: que recibe un natural x, y un ABB b, e inserta x en b manteniendo su cualidad de árbol binario de búsqueda.
+// Si x pertenece al árbol la operación no tiene efecto. 
 
+void insertarABB(ABB &A, int x){
+    
     if(A == NULL){
+
         ABB nuevo = new nodoABB;
         nuevo->dato = x;
         nuevo->izq = NULL;
@@ -29,9 +33,168 @@ void insertarABB(ABB &A, int x){
         return;
     }
 
-    if(x < A->dato){
-        return insertarABB(A->izq, x);
+    if(A->dato == x){
+        return;
     }
-    else
-        return insertarABB(A->der, x);
+
+    if(A->dato < x){
+        insertarABB(A->der, x);
+    }else
+        insertarABB(A->izq, x);
+}
+//------------------------------------------------------
+// B) función perteneceABB: que recibe un natural x y un ABB b y devuelve 
+// true si y solo si x es un elemento del árbol b. 
+
+bool perteneceABB(ABB A){
+
+    if(A == NULL){
+        return false;
+    }
+
+    if(A->dato == x){
+        return true;
+    }
+
+    if(A->dato < x){
+        return perteneceABB(A->der, x);
+    }else
+        return perteneceABB(A->izq, x);
+
+}
+
+//------------------------------------------------------
+
+// C) función maxABB: que recibe un ABB no vacío b 
+// y devuelve el elemento de máximo valor en b.
+
+// Precondicion: A no es vacio
+
+//Solucion iterativa:
+int maxABB(ABB A){
+
+    while(A->der != NULL){
+        A = A->der;
+    }
+
+    return A->dato;
+}
+
+//Solucion Recursiva:
+
+void maxABB(ABB A){
+
+    if(A->der == NULL){
+        return A->dato;
+    }
+
+    maxABB(A->der);
+}
+
+
+//---------------------------------------------------------
+// D) procedimiento removerMaxABB: que recibe un ABB no vacío b
+// y elimina el elemento de máximo valor en b.
+
+void RemoverMaxABB(ABB &A){
+
+    if(A->der == NULL){
+        ABB borrar = A;
+        A = A->izq;
+        delete borrar;
+    }else{
+        RemoverMaxABB(A->der);
+    }
+
+}
+//---------------------------------------------------------
+
+// E) procedimiento removerABB: que recibe un natural x y un ABB b y 
+// elimina el elemento de valor x de b, manteniendo su cualidad de ABB. 
+
+void removerABB(ABB &A, int x){
+
+    if(A == NULL){
+        return;
+    }
+
+    if(x < A->dato){
+        removerABB(A->izq, x);
+    }
+    else{
+
+        if(x > A->dato){
+            removerABB(A->der, x);
+        }
+        else{
+
+            // Caso 1: no tiene hijos
+            if(A->izq == NULL && A->der == NULL){
+                delete A;
+                A = NULL;
+            }
+
+            // Caso 2: tiene solamente hijo derecho
+            else{
+
+                if(A->izq == NULL){
+                    ABB aux = A;
+                    A = A->der;
+                    delete aux;
+                }
+
+                // Caso 2: tiene solamente hijo izquierdo
+                else{
+
+                    if(A->der == NULL){
+                        ABB aux = A;
+                        A = A->izq;
+                        delete aux;
+                    }
+
+                    // Caso 3: tiene dos hijos
+                    else{
+
+                        ABB aux = A->izq;
+
+                        while(aux->der != NULL){
+                            aux = aux->der;
+                        }
+
+                        A->dato = aux->dato;
+
+                        removerABB(A->izq, aux->dato);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//-------------------------------------------------------
+//F) función k-esimo: que recibe un natural k y un ABB b y retorna el subárbol que tiene al k-ésimo menor 
+//elemento de b como raíz. Si en b hay menos de k elementos o k es cero, la función debe retornar el 
+//árbol vacío. Si k es 1, se refiere al menor elemento del árbol, si k es 2 al 2do elemento más pequeño 
+//del árbol y así sucesivamente. La solución no puede visitar ningún nodo más de una vez. 
+ABB kesimo(ABB A, int k){
+
+    if(A == NULL || k <= 0){
+        return NULL;
+    }
+
+    int cantidadIzq = 0;
+
+    if(A->izq != NULL){
+        cantidadIzq = A->izq->cant;
+    }
+
+    if(k <= cantidadIzq){
+        return kesimo(A->izq, k);
+    }
+
+    if(k == cantidadIzq + 1){
+        return A;
+    }
+
+    return kesimo(A->der, k - cantidadIzq - 1);
 }
