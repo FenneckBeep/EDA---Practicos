@@ -176,25 +176,66 @@ void removerABB(ABB &A, int x){
 //elemento de b como raíz. Si en b hay menos de k elementos o k es cero, la función debe retornar el 
 //árbol vacío. Si k es 1, se refiere al menor elemento del árbol, si k es 2 al 2do elemento más pequeño 
 //del árbol y así sucesivamente. La solución no puede visitar ningún nodo más de una vez. 
-ABB kesimo(ABB A, int k){
 
-    if(A == NULL || k <= 0){
+ABB k_esimo(ABB a, unsigned int & k) {
+    if (a == NULL || k == 0)
         return NULL;
-    }
-
-    int cantidadIzq = 0;
-
-    if(A->izq != NULL){
-        cantidadIzq = A->izq->cant;
-    }
-
-    if(k <= cantidadIzq){
-        return kesimo(A->izq, k);
-    }
-
-    if(k == cantidadIzq + 1){
-        return A;
-    }
-
-    return kesimo(A->der, k - cantidadIzq - 1);
+    ABB res = k_esimo(a->izq, k);
+    if (res != NULL)
+        return res;
+    if (k-- == 1)
+        return a;
+    return k_esimo(a->der, k);
 }
+
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+//======================================================================
+
+// ********** EJERCICIO 4 - ARBOLES BINARIOS DE BÚSQUEDA Y FILTRADO  *******
+
+// SOLUCIÓN FÁCIL
+void insertarABBEstudiantes (ABBEstudiantes & a, EstInfo x) {
+    if (a == NULL) {
+        a = new nodoABBEstudiantes;
+        a->info = x;
+        a->der = a->izq = NULL;
+        return;
+    } 
+    if (x.ci < a->info.ci)
+        insertarABBEstudiantes (a->izq, x);
+    if (x.ci > a->info.ci)
+        insertarABBEstudiantes (a->der, x);
+}
+
+void incluir (ABBEstudiantes a, uint cota, ABBEstudiantes & res) {
+    if (a != NULL) {
+        if (a->info.nota > cota) {
+            insertarABBEstudiantes(res, a->info);
+        }
+        incluir(a->izq, cota, res);
+        incluir(a->der, cota, res);
+    }
+}
+
+ABBEstudiantes filtrado_facil (ABBEstudiantes a, uint cota) {
+    ABBEstudiantes res = NULL;
+    incluir(a,cota,res);
+    return res;
+}
+
