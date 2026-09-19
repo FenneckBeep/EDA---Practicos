@@ -1,1 +1,245 @@
+#include <iostream>
+using namespace std;
+
+//Arbol Struct:
+struct nodoAG { 
+int dato; 
+nodo AG * pH; 
+nodo AG * sH; 
+};
+typedef nodoAG * AG;
+
+/////////(MAIN)////////
+int main () {
+
+   
+}
+/////////(FIN)////////
+
+//--------------------------------------------------------
+// A) ArbolHoja: Dado un entero x retorna un árbol que sólo contiene a x (como una hoja).
+
+AG ArbolHoja(int x){
+
+    AG A = new nodoAG;
+    A->dato = x;
+    A->pH = NULL;
+    A->sH = NULL;
+    return A;
+}
+
+//--------------------------------------------------------
+// B) esArbolHoja: Dado un árbol, retorna true si y solo si el árbol es un árbol hoja (tiene un solo elemento).
+// pre-condición: a no es vacío
+
+bool esArbolHoja (AG A) {
+    return A->pH == NULL;
+}
+
+//--------------------------------------------------------
+// C) Pertenece: Dados un árbol y un entero x, retorna true si y solo si x pertenece al árbol.
+
+bool Pertenece(AG A, int x){
+
+    if(A == NULL){
+        return false;
+    }
+
+    if(A->dato == x){
+        return true;
+    }
+
+    return Pertenece(A->pH,x) || Pertenece(A->sH,x)
+
+}
+
+//--------------------------------------------------------
+// D) insertar: Dados un árbol y dos enteros h y p, inserta a h como el primer hijo de p en el árbol (hijo más a la izquierda)
+// si p pertenece al árbol y h no pertenece al árbol. En caso contrario la operación no tiene efecto. 
+
+// pre-condición: a no es vacío
+
+void insertar_aux (int p, int h, AG a) {
+    if (A->dato == p) {
+        AG nuevo = new nodoAG;
+        nuevo->dato = h;
+        nuevo->pH = NULL;
+        nuevo->sH = A->pH;
+        A->pH = nuevo;
+    }
+    else {
+        if (A->pH != NULL)
+            insertar_aux(p,h,A->pH);
+        if (A->sH != NULL)
+            insertar_aux(p,h,A->sH);
+    }
+}
+
+void insertar (int p, int h, AG A) {
+    if (!pertenece(A,h))
+        insertar_aux (p,h,A);
+}
+
+//------------------------------------------------------
+
+// E) orrar: Dados un árbol y un entero x, elimina a x del árbol si es una hoja
+// del árbol y no es la raíz del mismo. 
+// En caso contrario la operación no tiene efecto.
+// Al eliminar el elemento se debe liberar la memoria asignada a él. 
+
+void borrar (AG a, int x) {
+    if (a->elem == x)
+        return; // para evitar recorridas innecesarias si la raiz tiene a x
+    if (a->pH != NULL) {
+        if (a->pH->elem == x) {
+            if (a->pH->pH == NULL) {
+                // es hoja, hay que eliminar
+                AG borrar = a->pH;
+                a->pH = borrar->sH;
+                delete borrar;
+            }
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else 
+            borrar (a->pH, x);
+    }
+    if (a->sH != NULL) {
+        if (a->sH->elem == x) {
+            if (a->sH->pH == NULL) {
+                // es hoja, hay que eliminar
+                AG borrar = a->sH;
+                a->sH = borrar->sH;
+                delete borrar;
+            }
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else 
+            borrar (a->sH, x);
+    }
+}
+
+//-----------------------------------------------------
+
+// F) borrarSub: Dados un árbol y un entero x, elimina a x del árbol, si pertenece
+// al árbol y no es la raíz del mismo. En caso contrario la operación no tiene efecto.
+// Al eliminar el elemento se deberá liberar la memoria asignada a los elementos
+// que están en el subárbol dependiente de éste. 
+
+// Procedimiento auxiliar que borra todo para abajo y para la derecha
+void borrarTodo (AG & a) {
+    if (a != NULL) {
+        borrarTodo(a->sH);
+        borrarTodo(a->pH);
+        delete a;
+        a = NULL;
+    }
+}
+
+void borrarSub (AG & a, int x) {
+    if (a->elem == x)
+        return; // para evitar recorridas innecesarias si la raiz tiene a x
+    if (a->pH != NULL) {
+        if (a->pH->elem == x) {
+            borrarTodo(a->pH->pH); // borra todos los descendientes del nodo a borrar
+            AG borrar = a->pH; // luego voy a borrar el nodo en cuestión
+            a->pH = borrar->sH;
+            delete borrar;
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else
+            borrarSub(a->pH, x);
+    }
+    if (a->sH != NULL) {
+        if (a->sH->elem == x) {
+            borrarTodo(a->sH->pH); // borra todos los descendientes del nodo a borrar
+            AG borrar = a->sH; // luego voy a borrar el nodo en cuestión
+            a->sH = borrar->sH;
+            delete borrar;
+            return; // ya lo encontré, no puede estar repetido
+        }
+        else 
+            borrarSub (a->sH, x);
+    }
+}
+
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+//===============================================================================
+
+
+// ******************* EJERCICIO 6 - ARBOLES GENERALES  ********************
+
+AG copiaParcial (AG a, unsigned k){
+    if (a == NULL || k == 0)
+        return NULL;
+    AG copia = new nodoAG;
+    copia->elem = a->elem;
+    copia->pH = copiaParcial (a->pH, k-1);
+    copia->sH = copiaParcial (a->sH, k);
+    return copia;
+}
+
+// ******************* EJERCICIO 7 - ARBOLES GENERALES  ********************
+
+bool esPrefijo (Lista L, AG a) {
+    if (L == NULL)
+        return true;
+    if (a == NULL || L->elem != a->elem)
+        return false;
+    AG hijo = a->pH;
+    while (hijo != NULL && !esPrefijo(L->sig, hijo))
+        hijo = hijo->sH;
+    return (hijo != NULL);
+}
+
+
+// ******************* EJERCICIO 8 - ARBOLES GENERALES  ********************
+int mayorAmplitud(AG a) { 
+    if (a == NULL)
+        return 0;
+    AG hijo = a->pH;
+    int mis_hijos, amplitud, max_amplitud;
+    mis_hijos = amplitud = max_amplitud = 0;
+    while (hijo != NULL) {
+        mis_hijos++;
+        amplitud = mayorAmplitud(hijo);
+        if (amplitud > max_amplitud)
+            max_amplitud = amplitud;
+        hijo = hijo->sH;
+    }
+    if (mis_hijos > max_amplitud)
+        max_amplitud = mis_hijos;
+    return max_amplitud;
+}
+
+// ******************* EJERCICIO 9 - ARBOLES GENERALES  ********************
+
+// Ejercicio 9
+AG padre(AG a, int x) {
+    if (a == NULL || a->elem == x)
+        return NULL;
+    AG hijo = a->pH;
+    AG res = NULL;
+    while (hijo != NULL && res == NULL) {
+        if (hijo->elem == x)
+            return a;
+        else
+            res = padre(hijo, x);
+        hijo = hijo->sH;
+    }
+    return res;
+}
+// **************************************************************************
 
